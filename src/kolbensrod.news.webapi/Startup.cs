@@ -33,7 +33,6 @@ namespace kolbensrod.news.webapi
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseMvc();
         }
     }
