@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kolbensrod.news.webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class NewsController : Controller
     {
         [HttpGet]
@@ -33,5 +33,22 @@ namespace kolbensrod.news.webapi.Controllers
             news.Add(n2);
             return news;
         }
+
+        [HttpGet()]
+        [Route("{id}")]
+        public Models.News Get(string id)
+        {
+            var n1 = new Models.News()
+            {
+                NewsId = 1,
+                Title = "Ny nettside",
+                Text = "Vi har nå fått oss ny nettside. Følg med og få med deg alt som skjer!",
+                PublishedDate = new DateTime(2018, 04, 25)
+
+            };
+           
+            return n1;
+        }
+
     }
 }

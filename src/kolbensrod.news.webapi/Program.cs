@@ -20,6 +20,8 @@ namespace kolbensrod.news.webapi
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseKestrel()
+                .UseUrls("http://127.0.0.1:5021")
                 .Build();
     }
 }
