@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using kolbensrod.news.webapi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
 
 namespace kolbensrod.news.webapi.Controllers
 {
@@ -10,28 +13,15 @@ namespace kolbensrod.news.webapi.Controllers
     public class NewsController : Controller
     {
         [HttpGet]
-        public IEnumerable<Models.News> Get()
+        public IEnumerable<News> Get()
         {
-            var n1 = new Models.News()
+            var news = new List<News>();
+            using (var connection =
+                new NpgsqlConnection("Server=172.17.0.2;Port=5432;Database=News;User Id=postgres;Password=test;"))
             {
-                NewsId = 1,
-                Title = "Ny nettside",
-                Text = "Vi har nå fått oss ny nettside. Følg med og få med deg alt som skjer!",
-                PublishedDate = new DateTime(2018, 04, 25)
-
-            };
-            var n2 = new Models.News()
-            {
-                NewsId = 2,
-                Title = "Nytt adgangssystem",
-                Text = "Vi har nå fått oss nytt adgangssystem. Ta turen oppom resepsjonen for å bytte til nytt kort!",
-                PublishedDate = new DateTime(2018, 04, 25)
-
-            };
-            var news = new List<Models.News>();
-            news.Add(n1);
-            news.Add(n2);
-            return news;
+                connection.Open();
+                return (List<News>) connection.Query<News>("SELECT * FROM News");
+            }
         }
 
         [HttpGet()]
@@ -40,15 +30,28 @@ namespace kolbensrod.news.webapi.Controllers
         {
             var n1 = new Models.News()
             {
-                NewsId = 1,
                 Title = "Ny nettside",
                 Text = "Vi har nå fått oss ny nettside. Følg med og få med deg alt som skjer!",
-                PublishedDate = new DateTime(2018, 04, 25)
-
+                PublishedDate = new DateTime(2018, 08, 29)
             };
-           
+
             return n1;
         }
 
+        [HttpPost]
+        public News Post([FromBody] News news)
+        {
+            using (var connection =
+                new NpgsqlConnection("Server=172.17.0.2;Port=5432;Database=News;User Id=postgres;Password=test;"))
+            {
+                connection.Open();
+                string query =
+                    "INSERT INTO News (Title, Text, PublishedDate, Active) VALUES(@Title, @Text, @PublishedDate, @Active)";
+
+                connection.Execute(query, news);
+
+                return news;
+            }
+        }
     }
 }

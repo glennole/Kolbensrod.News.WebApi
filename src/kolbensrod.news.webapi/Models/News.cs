@@ -7,7 +7,7 @@ namespace kolbensrod.news.webapi.Models
 {
     public class News
     {
-        public int NewsId { get; set; }
+        public int NewsId { get; }
         public DateTime PublishedDate { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
