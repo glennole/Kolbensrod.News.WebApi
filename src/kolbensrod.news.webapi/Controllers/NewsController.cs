@@ -28,14 +28,12 @@ namespace kolbensrod.news.webapi.Controllers
         [Route("{id}")]
         public Models.News Get(string id)
         {
-            var n1 = new Models.News()
+            using (var connection =
+                new NpgsqlConnection("Server=172.17.0.2;Port=5432;Database=News;User Id=postgres;Password=test;"))
             {
-                Title = "Ny nettside",
-                Text = "Vi har nå fått oss ny nettside. Følg med og få med deg alt som skjer!",
-                PublishedDate = new DateTime(2018, 08, 29)
-            };
-
-            return n1;
+                connection.Open();
+                return (News) connection.Query<News>("SELECT * FROM News WHERE Id ='{id}'");
+            }
         }
 
         [HttpPost]

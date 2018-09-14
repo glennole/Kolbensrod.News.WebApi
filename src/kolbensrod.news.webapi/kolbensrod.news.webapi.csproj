@@ -23,4 +23,8 @@
     <None Remove="Scripts\20180827_Table_News.sql" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\kolbensrod.news.database\kolbensrod.news.database.csproj" />
+  </ItemGroup>
+
 </Project>
